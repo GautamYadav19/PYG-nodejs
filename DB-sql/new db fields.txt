@@ -1,0 +1,242 @@
+-- Create a table to store product reviews
+CREATE TABLE product_reviews (
+    review_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    user_id INT NOT NULL,
+    rating INT NOT NULL,
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+-- Create a table to store promotions and discounts
+CREATE TABLE promotions (
+    promotion_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    discount DECIMAL(5, 2) NOT NULL
+);
+
+-- Create a table to store shipping addresses
+CREATE TABLE shipping_addresses (
+    shipping_address_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    address_line1 VARCHAR(255) NOT NULL,
+    address_line2 VARCHAR(255),
+    city VARCHAR(255) NOT NULL,
+    state VARCHAR(255) NOT NULL,
+    postal_code VARCHAR(20) NOT NULL,
+    country VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Create a table to store order statuses
+CREATE TABLE order_statuses (
+    status_id INT AUTO_INCREMENT PRIMARY KEY,
+    status_name VARCHAR(255) NOT NULL
+);
+
+-- Create a table to store order status history
+CREATE TABLE order_status_history (
+    status_history_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    status_id INT NOT NULL,
+    status_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (status_id) REFERENCES order_statuses(status_id)
+);
+
+-- Create a table to store return requests
+CREATE TABLE return_requests (
+    return_request_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    user_id INT NOT NULL,
+    reason TEXT NOT NULL,
+    request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Create a table to store return approvals/rejections
+CREATE TABLE return_approvals (
+    return_approval_id INT AUTO_INCREMENT PRIMARY KEY,
+    return_request_id INT NOT NULL,
+    approved BOOLEAN NOT NULL,
+    approval_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (return_request_id) REFERENCES return_requests(return_request_id)
+);
+
+-- Create a table to store chat support requests
+CREATE TABLE chat_support_requests (
+    request_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    support_agent_id INT NOT NULL,
+    request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('open', 'closed') NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (support_agent_id) REFERENCES users(user_id)
+);
+
+-- Create a table to store chat messages
+CREATE TABLE chat_messages (
+    message_id INT AUTO_INCREMENT PRIMARY KEY,
+    request_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    message_text TEXT NOT NULL,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (request_id) REFERENCES chat_support_requests(request_id),
+    FOREIGN KEY (sender_id) REFERENCES users(user_id)
+);
+
+c
+-- Create a table to store product comparisons
+CREATE TABLE product_comparisons (
+    comparison_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_ids VARCHAR(255) NOT NULL,
+    comparison_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Create a table to store shipping details
+CREATE TABLE shipping_details (
+    shipping_detail_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    shipping_address_id INT NOT NULL,
+    shipping_method VARCHAR(255) NOT NULL,
+    shipping_cost DECIMAL(10, 2) NOT NULL,
+    shipping_date TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (shipping_address_id) REFERENCES shipping_addresses(shipping_address_id)
+);
+
+-- Create a table to store customer reviews and feedback
+CREATE TABLE customer_reviews (
+    review_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    rating INT NOT NULL,
+    review_text TEXT,
+    review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+c
+
+-- Create a table to store loyalty program membership
+CREATE TABLE loyalty_users (
+    user_id INT NOT NULL,
+    program_id INT NOT NULL,
+    PRIMARY KEY (user_id, program_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (program_id) REFERENCES loyalty_programs(program_id)
+);
+
+-- Create a table to track user interactions for predictive analytics
+CREATE TABLE user_interactions (
+    interaction_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    interaction_type ENUM('view', 'add_to_cart', 'purchase', 'like', 'dislike') NOT NULL,
+    interaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+-- Create a table to store product recommendations
+CREATE TABLE product_recommendations (
+    recommendation_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    recommended_product_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (recommended_product_id) REFERENCES products(product_id)
+);
+
+-- Create a table to track abandoned shopping carts
+CREATE TABLE abandoned_carts (
+    cart_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    last_activity TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Create a table to store advanced search and filtering criteria isma dhyan se dekh kar karna pedga
+CREATE TABLE search_filters (
+    filter_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    filter_name VARCHAR(255) NOT NULL,
+    filter_criteria JSON,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+-- Create a table to store product attachments and documents
+CREATE TABLE product_attachments (
+    attachment_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    attachment_name VARCHAR(255) NOT NULL,
+    attachment_url VARCHAR(255) NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+-- Create a table to manage user wishlists and favorites
+CREATE TABLE user_wishlists (
+    wishlist_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Create a table to store wishlist items
+CREATE TABLE wishlist_items (
+    wishlist_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    wishlist_id INT NOT NULL,
+    product_id INT NOT NULL,
+    FOREIGN KEY (wishlist_id) REFERENCES user_wishlists(wishlist_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+-- Create a table to store product recommendations
+CREATE TABLE product_recommendations (
+    recommendation_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    recommended_product_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (recommended_product_id) REFERENCES products(product_id)
+);
+-- Create a table to manage user order history
+CREATE TABLE user_order_history (
+    history_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    order_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
+
+-- Create a table to track user sessions
+CREATE TABLE user_sessions (
+    session_id INT AUTO_INCREMENT PRIMAR-Y KEY,
+    user_id INT NOT NULL,
+    session_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    session_end TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+-- Create a table to store delivery methods and options
+CREATE TABLE delivery_methods (
+    method_id INT AUTO_INCREMENT PRIMARY KEY,
+    method_name VARCHAR(255) NOT NULL,
+    description TEXT
+);
+
+-- Create a table to track order deliveries
+CREATE TABLE order_deliveries (
+    delivery_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    method_id INT NOT NULL,
+    delivery_date TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (method_id) REFERENCES delivery_methods(method_id)
+);
+

@@ -1,0 +1,27 @@
+1	Product Categories 
+2	Product Listings 
+3	Search Functioality 
+4	Shopping Cart 
+5	User Registration/Login 
+8	Order Management 
+11	Product Filtering and Sorting 
+12	Wishlist and Favorites 
+13	Product Recommendations 
+14	Inventory Management 
+15	Discounts and Promotions 
+24	Customer Accounts 
+28	Abandoned Cart Recovery 
+42	Advanced Search and Filtering
+51	Social Login and Single Sign-On (optional)
+52	Dynamic Pricing and Discounts 
+55	Product Customization Tools (optional)
+76	Advanced Data Analytics and Predictive Analytics 
+77	Dynamic Product Pricing based on External Factors 
+
+product name -   company name
+singleband router - syrotech
+dualband router - syrotech
+N301 router - tenda
+Ac5 router - tenda
+patchcord - sisco
+adopter - RMG
