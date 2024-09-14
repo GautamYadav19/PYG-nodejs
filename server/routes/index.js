@@ -25,6 +25,6 @@ router.post("/login", async function (req, res, next) {
 
   
 router.post("/createproduct",controller.createProduct)
-router.post("/list",controller.getList)
+router.get("/getproductlist",controller.getProductList)
 
 module.exports= router
