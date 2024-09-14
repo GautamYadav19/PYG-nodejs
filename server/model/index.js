@@ -76,9 +76,9 @@ rootdb.registeration = (input) => {
     );
   });
 };
-rootdb.getlist = () => {
+rootdb.getProductList = () => {
   return new Promise((resolve, reject) => {
-    pool.query("select * from product_table", (err, result) => {
+    pool.query("SELECT p.product_ID, p.name AS product_name, i.path AS image_path, pc.fakePrice AS fake_price, pc.fixedPrice AS real_price FROM Product_table p inner JOIN    Image_Table i ON p.image_ID = i.image_ID inner JOIN Price_compare_table pc ON p.price_compare_ID = pc.price_compare_ID;", (err, result) => {
       if (err) {
         return reject(err);
       }
@@ -137,7 +137,7 @@ rootdb.CreateProduct = (input) => {
                               (err, price_compare_id) => {
                                 if (price_compare_id) {
                                   //sql6
-                                  console.log(input.Category);
+                                  console.log("api data ", input.price.tax);
                                   let sql7 =
                                     "insert into product_table(name,category,tax,description_ID,inventory_ID,price_compare_ID,discount_ID,image_ID,created_at) values(?,?,?,?,?,?,?,?,now());";
                                   pool.query(

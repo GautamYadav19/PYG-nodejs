@@ -32,9 +32,9 @@ controller.createProduct = async (req,res)=>{
     }
 }
 
-controller.getList =async (req,res)=>{
+controller.getProductList =async (req,res)=>{
     try {
-        let result = await model.getlist()
+        let result = await model.getProductList()
         res.status(200).json(result)
     } catch (error) {
         res.status(500).json(error)
